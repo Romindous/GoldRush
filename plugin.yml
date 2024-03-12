@@ -1,0 +1,10 @@
+main: ru.romindous.Main
+name: GoldRush
+version: 2.0
+author: Romindous
+api-version: 1.18
+load: POSTWORLD
+
+commands:
+  gr:
+    description: The command for GR game
