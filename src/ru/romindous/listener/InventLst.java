@@ -6,14 +6,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
-import ru.komiss77.utils.ItemUtils;
+import ru.komiss77.utils.ItemUtil;
 
 public class InventLst implements Listener {
 	
 	@EventHandler
 	public void onInv(final InventoryClickEvent e) {
 		final ItemStack it = e.getCurrentItem();
-		if (e.getSlot() != e.getRawSlot() || ItemUtils.isBlank(it, false)) return;
+		if (e.getSlot() != e.getRawSlot() || ItemUtil.isBlank(it, false)) return;
 		switch (it.getType()) {
 		default:
 			e.setCancelled(true);

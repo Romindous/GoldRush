@@ -118,7 +118,7 @@ public class PlRusher extends Oplayer implements Rusher {
 	}
 
 	public double mdDmg(final double dmg) {
-		final PotionEffect se = tm.rs.getEntity().getPotionEffect(PotionEffectType.INCREASE_DAMAGE);
+		final PotionEffect se = tm.rs.getEntity().getPotionEffect(PotionEffectType.STRENGTH);
 		return se == null ? dmg : dmg * ((se.getAmplifier() + 1) * STR_MOD + 1f);
 	}
 

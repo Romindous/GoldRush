@@ -42,12 +42,13 @@ public class Shop implements Build {
 		for (int x = 0; x < dX; x++) {
 			for (int z = 0; z < dZ; z++) {
 				for (int y = 0; y < dY; y++) {
-					final XYZ lc = new XYZ(wnm, y, x, z);
+					final XYZ lc = new XYZ(wnm, x, y, z);
 					final Material mt = sch.getMaterial(lc);
 					if (mt == null || mt.isAir()) continue;
 					final BlockData bd = sch.getBlockData(lc);
-					if (bd == null) w.setType(pos.x + x, pos.y + y, pos.z + z, mt);
-					else w.setBlockData(pos.x + x, pos.y + y, pos.z + z, bd);
+					final Block bl = pos.clone().add(x, y, z).getBlock();
+					if (bd == null) bl.setType(mt, false);
+					else bl.setBlockData(bd, false);
 					blks.add(new WXYZ(w, pos.x + x, pos.y + y, pos.z + z));
 				}
 			}
@@ -95,7 +96,7 @@ public class Shop implements Build {
 			final Location loc = p.getCenterLoc();
 			final Block b = loc.getBlock();
 			final BlockData bd = b.getBlockData();
-			cLoc.w.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
+			cLoc.w.spawnParticle(Particle.BLOCK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
 			cLoc.w.playSound(loc, bd.getSoundGroup().getBreakSound(), 1f, 0.8f);
 			b.setType(Material.AIR, false);
 		}

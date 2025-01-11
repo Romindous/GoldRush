@@ -1,7 +1,7 @@
 package ru.romindous.invent;
 
 import org.bukkit.enchantments.Enchantment;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.TCUtil;
 import ru.romindous.Main;
 import ru.romindous.game.object.PlRusher;
 import ru.romindous.game.object.Rusher;
@@ -38,7 +38,7 @@ public class ShopInv implements InventoryProvider {
 		inv.setContents(emt);
 		
 		its.set(4, ClickableItem.empty(new ItemBuilder(Material.LECTERN).name("§e§nВольный Магазин")
-			.addLore("§бОсмотрись, может что приглядишь!").addLore("§бСнаряжение и улучшения на твой вкус.").build()));
+			.lore("§бОсмотрись, может что приглядишь!").lore("§бСнаряжение и улучшения на твой вкус.").build()));
 
 		final PlRusher rs = Rusher.getPlRusher(pl);
 		for (final Upgrade up : Upgrade.values()) marketClick(rs, up, its);
@@ -50,19 +50,19 @@ public class ShopInv implements InventoryProvider {
 			return;
 		}
 		final List<String> lrs = new ArrayList<>();
-		lrs.add(TCUtils.N + up.desc);
+		lrs.add(TCUtil.N + up.desc);
 		lrs.add(" ");
 		final boolean reqs = up.canBuy(rs, lrs);
 		lrs.add(" ");
 		if (rs.getUpg(up) != null) {
-			lrs.add(TCUtils.P + "Уже приобретено!");
+			lrs.add(TCUtil.P + "Уже приобретено!");
 			its.set(up.slot, ClickableItem.empty(new ItemBuilder(up.icn).name(Upgrade.CLR+SL+up.name)
-					.addLore(lrs).addEnchant(Enchantment.MENDING).build()));
+					.lore(lrs).enchant(Enchantment.MENDING).build()));
 		} else if (reqs) {
-			lrs.add("§a✔ " + TCUtils.P + up.price + " ур. опыта");
+			lrs.add("§a✔ " + TCUtil.P + up.price + " ур. опыта");
 			lrs.add(" ");
 			lrs.add("§e[§мКлик§e] §2- Приобрести");
-			its.set(up.slot, ClickableItem.of(new ItemBuilder(up.icn).name(Upgrade.CLR+up.name).addLore(lrs).build(), e -> {
+			its.set(up.slot, ClickableItem.of(new ItemBuilder(up.icn).name(Upgrade.CLR+up.name).lore(lrs).build(), e -> {
 				final Player pl = rs.getPlayer();
 				if (up.canBuy(rs, null)) {
 					rs.level(-up.price);
@@ -74,10 +74,10 @@ public class ShopInv implements InventoryProvider {
 				}
 			}));
 		} else {
-			lrs.add((rs.level() < up.price ? "§c❌ " : "§a✔ ") + TCUtils.P + up.price + " ур. опыта");
+			lrs.add((rs.level() < up.price ? "§c❌ " : "§a✔ ") + TCUtil.P + up.price + " ур. опыта");
 			lrs.add(" ");
 			lrs.add("§4Не все требования выполнены!");
-			its.set(up.slot, ClickableItem.empty(new ItemBuilder(up.icn).name(Upgrade.CLR+up.name).addLore(lrs).build()));
+			its.set(up.slot, ClickableItem.empty(new ItemBuilder(up.icn).name(Upgrade.CLR+up.name).lore(lrs).build()));
 		}
 	}
 	

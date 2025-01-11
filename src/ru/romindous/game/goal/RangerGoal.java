@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 import ru.komiss77.enums.GameState;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.utils.FastMath;
-import ru.komiss77.utils.LocationUtil;
+import ru.komiss77.utils.LocUtil;
 import ru.komiss77.version.Nms;
 import ru.romindous.game.Arena;
 import ru.romindous.game.object.Nexus;
@@ -179,7 +179,7 @@ public class RangerGoal implements MobGoal {
 						mob.launchProjectile(Arrow.class, getArrowVc(vc, PRJ_SPD + atkKb)).setFireTicks(1000);
 						break;
                     case PILLAGER:
-						mob.launchProjectile(Arrow.class, getArrowVc(vc, PRJ_SPD + atkKb)).setKnockbackStrength(1);
+						mob.launchProjectile(Arrow.class, getArrowVc(vc, PRJ_SPD + atkKb)).setCritical(true);
 //						eyel.setYaw(eyel.getYaw() + 10f);
 //						mob.launchProjectile(Arrow.class, getArrowVc(vc.clone()).multiply(atkKb));
 //						eyel.setYaw(eyel.getYaw() - 20f);
@@ -224,7 +224,7 @@ public class RangerGoal implements MobGoal {
 	}
 
 	private LivingEntity findFreeTgt(final WXYZ mbl) {
-		return LocationUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
+		return LocUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
 			return le.getPortalCooldown() == 0 && mob.getEntityId() != le.getEntityId() && nx.isEnemy(le);
 		});
 	}

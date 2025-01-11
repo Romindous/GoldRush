@@ -2,6 +2,7 @@ package ru.romindous.type;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
@@ -39,8 +40,8 @@ public enum BuildType {
 	public static final int maxXZ = 4;
 	public static final int maxY = 10;
 	public static final int dsLoc = 2;
-	public static final Material gSite = Material.RAW_GOLD_BLOCK;
-	public static final Material dSite = Material.DEEPSLATE_REDSTONE_ORE;
+	public static final BlockType gSite = BlockType.RAW_GOLD_BLOCK;
+	public static final BlockType dSite = BlockType.DEEPSLATE_REDSTONE_ORE;
 	public static final EnumMap<BuildType, Schematic[]> schems = getSchems();
 	public static final Schematic SHOP = new Schematic(Bukkit.getConsoleSender(),
 		new File(Bukkit.getPluginsFolder().getAbsolutePath() + "/Ostrov/schematics/SHOP.schem"), false);
@@ -179,7 +180,7 @@ public enum BuildType {
 	}
 	
 	public MobGoal goal(final Mob mb, final Nexus nx, final int hp, final float ar,
-			final float spd, final float dmg, final float cd, final float kb) {
+		final float spd, final float dmg, final float cd, final float kb) {
 		return switch (this) {
 		case BARRACK -> new KnightGoal(mb, nx, hp, ar, spd, dmg, cd, kb);
 		case RANGE -> new RangerGoal(mb, nx, hp, ar, spd, dmg, cd, kb);

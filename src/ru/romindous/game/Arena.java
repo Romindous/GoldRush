@@ -13,14 +13,15 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import ru.komiss77.ApiOstrov;
+import ru.komiss77.enums.Game;
 import ru.komiss77.enums.GameState;
 import ru.komiss77.enums.Stat;
+import ru.komiss77.modules.games.GM;
 import ru.komiss77.modules.player.Oplayer;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.modules.world.XYZ;
 import ru.komiss77.scoreboard.SideBar;
-import ru.komiss77.utils.ItemBuilder;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.*;
 import ru.romindous.Main;
 import ru.romindous.game.object.Build;
 import ru.romindous.game.object.Nexus;
@@ -56,19 +57,19 @@ public class Arena {
     public GameState gst;
     private BukkitTask task;
 
-    public static final ItemStack sword = new ItemBuilder(Material.GOLDEN_SWORD).setUnbreakable(true)
-            .name("§4Каратель").addLore(Arrays.asList(" ", "§7Сокруши своих §cврагов", "§4критическим §eударом")).build();
-    public static final ItemStack pick = new ItemBuilder(Material.IRON_PICKAXE).setUnbreakable(true)
-            .name("§мКувалда").addLore(Arrays.asList(" ", "§чЛКМ §e- Сокрушение", "§чПКМ §e- Строительство")).build();
-    public static final ItemStack bow = new ItemBuilder(Material.BOW).setUnbreakable(true).addEnchant(Enchantment.ARROW_INFINITE)
-            .name("§5Цибуля").addLore(Arrays.asList(" ", "§7Напичкай своих §cврагов", "§7острыми §eмаслинами")).build();
+    public static final ItemStack sword = new ItemBuilder(Material.GOLDEN_SWORD).unbreak(true)
+        .name("§4Каратель").lore(Arrays.asList(" ", "§7Сокруши своих §cврагов", "§4критическим §eударом")).build();
+    public static final ItemStack pick = new ItemBuilder(Material.IRON_PICKAXE).unbreak(true)
+        .name("§мКувалда").lore(Arrays.asList(" ", "§чЛКМ §e- Сокрушение", "§чПКМ §e- Строительство")).build();
+    public static final ItemStack bow = new ItemBuilder(Material.BOW).unbreak(true).enchant(Enchantment.INFINITY)
+        .name("§5Цибуля").lore(Arrays.asList(" ", "§7Напичкай своих §cврагов", "§7острыми §eмаслинами")).build();
     public static final ItemStack arrow = new ItemBuilder(Material.ARROW).name("§dМетка").build();
     public static final ItemStack map = new ItemBuilder(Material.COMPASS).name("§aКарта")
-            .addLore(Arrays.asList(" ", "§чПКМ §7- показать §eпостройки", "§7стой на §eоткрытой §7местности")).build();
+        .lore(Arrays.asList(" ", "§чПКМ §7- показать §eпостройки", "§7стой на §eоткрытой §7местности")).build();
     public static final ItemStack tpMap = new ItemBuilder(Material.RECOVERY_COMPASS).name("§2Магическая Карта")
-            .addLore(Arrays.asList(" ", "§чПКМ §7- показать §eпостройки", "§чЛКМ §7- §eтелепорт §7к ним")).build();
+        .lore(Arrays.asList(" ", "§чПКМ §7- показать §eпостройки", "§чЛКМ §7- §eтелепорт §7к ним")).build();
     private static final FireworkEffect fwe = FireworkEffect.builder().with(Type.BURST).flicker(true)
-            .withColor(TCUtils.getBukkitColor(TCUtils.getTextColor(TCUtils.P))).withFade(TCUtils.getBukkitColor(TCUtils.getTextColor(TCUtils.A))).build();
+        .withColor(TCUtil.getBukkitColor(TCUtil.getTextColor(TCUtil.P))).withFade(TCUtil.getBukkitColor(TCUtil.getTextColor(TCUtil.A))).build();
     private static final char[] clrs = {'1', '2', '3', 'a', 'b', 'c', 'd', 'e'};
 
     public Arena(final String name, final byte min, final WXYZ lobby, final XYZ[] bases, final XYZ[] shops, final boolean bots) {
@@ -101,7 +102,7 @@ public class Arena {
             default:
                 return spec(rs);
             case ФИНИШ:
-                rs.getPlayer().sendMessage(Main.PRFX + "§cКарта " + TCUtils.P + name + " §cуже заканчивается!");
+                rs.getPlayer().sendMessage(Main.PRFX + "§cКарта " + TCUtil.P + name + " §cуже заканчивается!");
                 return false;
             case ОЖИДАНИЕ, СТАРТ:
                 if (pls.size() < max) {
@@ -115,42 +116,42 @@ public class Arena {
                         rs.item(Main.race, 4);
                         rs.item(Main.leave, 7);
                         p.teleport(lobby.getCenterLoc());
-                        p.sendMessage(Main.PRFX + TCUtils.N + "Ты на карте " + TCUtils.P + name);
+                        p.sendMessage(Main.PRFX + TCUtil.N + "Ты на карте " + TCUtil.P + name);
                         final String prm = ((PlRusher) rs).getTopPerm();
-                        rs.taq(TCUtils.N + "[" + TCUtils.P + name + TCUtils.N + "] ", TCUtils.P,
-                                prm.isEmpty() ? "" : TCUtils.N + " (§e" + prm + TCUtils.N + ")");
+                        rs.taq(TCUtil.N + "[" + TCUtil.P + name + TCUtil.N + "] ", TCUtil.P,
+                            prm.isEmpty() ? "" : TCUtil.N + " (§e" + prm + TCUtil.N + ")");
                         for (final Rusher r : pls) {
                             r.ifPlayer(rp -> {
-                                ApiOstrov.sendActionBarDirect(rp, amtToHB());
+                                ScreenUtil.sendActionBarDirect(rp, amtToHB());
                                 if (rp.getEntityId() != p.getEntityId()) {
-                                    rp.sendMessage(Main.PRFX + TCUtils.P + rs.name() + TCUtils.N + " зашел на карту!");
+                                    rp.sendMessage(Main.PRFX + TCUtil.P + rs.name() + TCUtil.N + " зашел на карту!");
                                 }
                             });
                         }
                         if (pls.size() == min) {
                             countStart();
                         } else if (pls.size() < min) {
-                            ApiOstrov.sendArenaData(this.name, GameState.ОЖИДАНИЕ, Main.PRFX, "", "", "", "", pls.size());
+                            GM.sendArenaData(Game.GR, this.name, GameState.ОЖИДАНИЕ, pls.size(), Main.PRFX, "", "", "");
                             for (final Rusher r : pls) {
                                 r.ifPlayer(rp -> {
                                     if (rp.getEntityId() == p.getEntityId()) {
                                         startScore((PlRusher) r);
                                     } else {
                                         ((Oplayer) rs).score.getSideBar()
-                                                .update(AMT, TCUtils.N + "Игроков: " + TCUtils.P + pls.size() + TCUtils.N + " чел.")
-                                                .update(LIMIT, TCUtils.N + "Ждем еще " + TCUtils.P + (min - pls.size()) + TCUtils.N + " чел.");
+                                            .update(AMT, TCUtil.N + "Игроков: " + TCUtil.P + pls.size() + TCUtil.N + " чел.")
+                                            .update(LIMIT, TCUtil.N + "Ждем еще " + TCUtil.P + (min - pls.size()) + TCUtil.N + " чел.");
                                     }
                                 });
                             }
                         } else {
-                            ApiOstrov.sendArenaData(this.name, GameState.СТАРТ, Main.PRFX, "", "", "", "", pls.size());
+                            GM.sendArenaData(Game.GR, this.name, GameState.СТАРТ, pls.size(), Main.PRFX, "", "", "");
                             for (final Rusher r : pls) {
                                 r.ifPlayer(rp -> {
                                     if (rp.getEntityId() == p.getEntityId()) {
                                         startScore((PlRusher) r);
                                     } else {
                                         ((Oplayer) rs).score.getSideBar()
-                                                .update(AMT, TCUtils.N + "Игроков: " + TCUtils.P + pls.size() + TCUtils.N + " чел.");
+                                            .update(AMT, TCUtil.N + "Игроков: " + TCUtil.P + pls.size() + TCUtil.N + " чел.");
                                     }
                                 });
                             }
@@ -172,9 +173,9 @@ public class Arena {
         rs.ifPlayer(p -> {
             p.setGameMode(GameMode.SPECTATOR);
             Main.inGameCnt();
-            p.sendMessage(Main.PRFX + TCUtils.N + "Простмотр карты " + TCUtils.P + name);
-            rs.taq(TCUtils.N + "[" + TCUtils.P + name + TCUtils.N + "] ",
-                    TCUtils.N, TCUtils.N + " (§8Зритель" + TCUtils.N + ")");
+            p.sendMessage(Main.PRFX + TCUtil.N + "Простмотр карты " + TCUtil.P + name);
+            rs.taq(TCUtil.N + "[" + TCUtil.P + name + TCUtil.N + "] ",
+                TCUtil.N, TCUtil.N + " (§8Зритель" + TCUtil.N + ")");
         });
         rs.clearInv();
         rs.item(Main.glow, 2);
@@ -189,11 +190,11 @@ public class Arena {
                     case ОЖИДАНИЕ:
                         if (pls.size() == 0) end();
                         else {
-                            ApiOstrov.sendArenaData(this.name, GameState.ОЖИДАНИЕ, Main.PRFX, "", "", "", "", pls.size());
+                            GM.sendArenaData(Game.GR, this.name, GameState.ОЖИДАНИЕ, pls.size(), Main.PRFX, "", "", "");
                             for (final Rusher r : pls) {
                                 r.ifPlayer(rp -> {
-                                    ApiOstrov.sendActionBarDirect(rp, amtToHB());
-                                    rp.sendMessage(Main.PRFX + TCUtils.P + rs.name() + TCUtils.N + " вышел с карты!");
+                                    ScreenUtil.sendActionBarDirect(rp, amtToHB());
+                                    rp.sendMessage(Main.PRFX + TCUtil.P + rs.name() + TCUtil.N + " вышел с карты!");
                                 });
                             }
                         }
@@ -206,23 +207,23 @@ public class Arena {
                             }
                             for (final Rusher r : pls) {
                                 r.ifPlayer(rp -> {
-                                    ApiOstrov.sendActionBarDirect(rp, amtToHB());
-                                    rp.sendMessage(Main.PRFX + TCUtils.P + rs.name() + TCUtils.N + " вышел с карты!");
-                                    rp.sendMessage(Main.PRFX + TCUtils.N + "На карте недостаточно игроков для начала!");
+                                    ScreenUtil.sendActionBarDirect(rp, amtToHB());
+                                    rp.sendMessage(Main.PRFX + TCUtil.P + rs.name() + TCUtil.N + " вышел с карты!");
+                                    rp.sendMessage(Main.PRFX + TCUtil.N + "На карте недостаточно игроков для начала!");
                                     startScore((PlRusher) r);
                                 });
                             }
-                            ApiOstrov.sendArenaData(this.name, GameState.ОЖИДАНИЕ, Main.PRFX, "", "", "", "", pls.size());
+                            GM.sendArenaData(Game.GR, this.name, GameState.ОЖИДАНИЕ, pls.size(), Main.PRFX, "", "", "");
                         } else {
                             for (final Rusher r : pls) {
                                 r.ifPlayer(rp -> {
-                                    ApiOstrov.sendActionBarDirect(rp, amtToHB());
-                                    rp.sendMessage(Main.PRFX + TCUtils.P + rs.name() + TCUtils.N + " вышел с карты!");
+                                    ScreenUtil.sendActionBarDirect(rp, amtToHB());
+                                    rp.sendMessage(Main.PRFX + TCUtil.P + rs.name() + TCUtil.N + " вышел с карты!");
                                     ((Oplayer) rs).score.getSideBar()
-                                            .update(AMT, TCUtils.N + "Игроков: " + TCUtils.P + pls.size() + TCUtils.N + " чел.");
+                                        .update(AMT, TCUtil.N + "Игроков: " + TCUtil.P + pls.size() + TCUtil.N + " чел.");
                                 });
                             }
-                            ApiOstrov.sendArenaData(this.name, GameState.СТАРТ, Main.PRFX, "", "", "", "", pls.size());
+                            GM.sendArenaData(Game.GR, this.name, GameState.СТАРТ, pls.size(), Main.PRFX, "", "", "");
                         }
                         break;
                     case ИГРА:
@@ -247,7 +248,7 @@ public class Arena {
         time = 30;
         gst = GameState.СТАРТ;
         lobby.w.setFullTime(12000l);
-        ApiOstrov.sendArenaData(name, GameState.СТАРТ, Main.PRFX, "", "", "", "", pls.size());
+        GM.sendArenaData(Game.GR, name, GameState.СТАРТ, pls.size(), Main.PRFX, "", "", "");
 
         for (final Rusher rs : pls) {
             rs.ifPlayer(p -> {
@@ -267,12 +268,12 @@ public class Arena {
                         break;
                 }
 
-                final String rmn = TCUtils.P + ApiOstrov.secondToTime(time) + TCUtils.N + "до начала!";
+                final String rmn = TCUtil.P + TimeUtil.secondToTime(time) + TCUtil.N + "до начала!";
                 for (final Rusher rs : pls) {
                     rs.ifPlayer(p -> {
                         ((Oplayer) rs).score.getSideBar().update(LIMIT, rmn);
                         if (time < 6) {
-                            ApiOstrov.sendTitleDirect(p, (time < 4 ? TCUtils.A : TCUtils.P) + time, "");
+                            ScreenUtil.sendTitleDirect(p, (time < 4 ? TCUtil.A : TCUtil.P) + time, "");
                             p.playSound(p.getEyeLocation(), Sound.BLOCK_COPPER_BREAK, 2f, 0.8f);
                         }
                     });
@@ -289,12 +290,12 @@ public class Arena {
             if (le instanceof LivingEntity) continue;
             le.remove();
         }
-        ApiOstrov.sendArenaData(name, GameState.ИГРА, Main.PRFX, "", "", "", "", pls.size());
+        GM.sendArenaData(Game.GR, name, GameState.ИГРА, pls.size(), Main.PRFX, "", "", "");
 
         for (final Rusher rs : pls) {
             final WXYZ org = getNr2DLoc(rs.getEntity().getLocation(), orbs.keySet());
             rs.team(new Nexus(rs, orbs.remove(org).cc));
-            if (rs.race() == null) rs.race(ApiOstrov.rndElmt(RaceType.values()));
+            if (rs.race() == null) rs.race(ClassUtil.rndElmt(RaceType.values()));
             rs.team().blds.add(rs.race().build(rs.team(), org, BuildType.GOLD, 1));
             rs.team().chgRecs(100, 0);
 
@@ -310,18 +311,18 @@ public class Arena {
                 if (up.canBuy(rs, null)) up.addFor(rs);
 
             rs.teleport(rs.getEntity(), new Location(org.w, org.x + ApiOstrov.rndSignNum(BuildType.maxXZ, 3),
-                    org.y + 1, org.z + ApiOstrov.rndSignNum(BuildType.maxXZ, 3)));
-            rs.taq(TCUtils.N + "[" + TCUtils.P + name + TCUtils.N + "] ", rs.team().color(),
-                    TCUtils.N + " (" + TCUtils.P + rs.klls() + TCUtils.N + "-" + TCUtils.P
-                            + rs.mkls() + TCUtils.N + "-" + TCUtils.P + rs.dths() + TCUtils.N + ")");
+                org.y + 1, org.z + ApiOstrov.rndSignNum(BuildType.maxXZ, 3)));
+            rs.taq(TCUtil.N + "[" + TCUtil.P + name + TCUtil.N + "] ", rs.team().color(),
+                TCUtil.N + " (" + TCUtil.P + rs.klls() + TCUtil.N + "-" + TCUtil.P
+                    + rs.mkls() + TCUtil.N + "-" + TCUtil.P + rs.dths() + TCUtil.N + ")");
         }
 
         for (final Rusher rs : pls) {
             rs.ifPlayer(p -> {
                 Main.nrmlzPl(p);
                 gameScore((PlRusher) rs);
-                ApiOstrov.sendTitleDirect(p, TCUtils.N + "Начинаем", TCUtils.N + "Построй " + TCUtils.P + "армию " +
-                        TCUtils.N + "и " + TCUtils.A + "сокруши " + TCUtils.N + "врагов!", 12, 60, 20);
+                ScreenUtil.sendTitleDirect(p, TCUtil.N + "Начинаем", TCUtil.N + "Построй " + TCUtil.P + "армию " +
+                    TCUtil.N + "и " + TCUtil.A + "сокруши " + TCUtil.N + "врагов!", 12, 60, 20);
                 p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 2f, 0.6f);
             });
         }
@@ -333,10 +334,10 @@ public class Arena {
             public void run() {
                 switch (time--) {
                     case 120:
-                        toAllPls(p -> ApiOstrov.sendActionBarDirect(p, TCUtils.N + "Осталось " + TCUtils.P + "2 минуты " + TCUtils.N + "до конца!"));
+                        toAllPls(p -> ScreenUtil.sendActionBarDirect(p, TCUtil.N + "Осталось " + TCUtil.P + "2 минуты " + TCUtil.N + "до конца!"));
                         break;
                     case 60:
-                        toAllPls(p -> ApiOstrov.sendActionBarDirect(p, TCUtils.N + "Осталась " + TCUtils.P + "1 минута " + TCUtils.N + "до конца!"));
+                        toAllPls(p -> ScreenUtil.sendActionBarDirect(p, TCUtil.N + "Осталась " + TCUtil.P + "1 минута " + TCUtil.N + "до конца!"));
                         break;
                     case 0:
                         countFinish();
@@ -345,7 +346,7 @@ public class Arena {
                         break;
                 }
 
-                final String rmn = TCUtils.P + ApiOstrov.secondToTime(time);
+                final String rmn = TCUtil.P + TimeUtil.secondToTime(time);
                 lobby.w.setTime((time % 375) << 6);
                 for (final Rusher rs : pls) {
                     final Nexus tm = rs.team();
@@ -384,11 +385,11 @@ public class Arena {
             case 1:
                 time = 10;
                 gst = GameState.ФИНИШ;
-                ApiOstrov.sendArenaData(name, GameState.ФИНИШ, Main.PRFX, "", "", "", "", 1);
+                GM.sendArenaData(Game.GR, name, GameState.ФИНИШ, 1, Main.PRFX, "", "", "");
                 final Rusher rs = pls.iterator().next();
                 rs.ifPlayer(p -> {
-                    ApiOstrov.sendTitleDirect(p, TCUtils.N + "Победа", TCUtils.N + "Комманда " +
-                            TCUtils.nameOf(rs.team().cc, "ая", true) + " §eОдержала Верх!");
+                    ScreenUtil.sendTitleDirect(p, TCUtil.N + "Победа", TCUtil.N + "Комманда " +
+                        TCUtil.nameOf(rs.team().cc, "ая", true) + " §eОдержала Верх!");
                     ApiOstrov.addStat(p, Stat.GR_game);
                     ApiOstrov.addStat(p, Stat.GR_win);
                 });
@@ -414,9 +415,9 @@ public class Arena {
             default:
                 time = 10;
                 gst = GameState.ФИНИШ;
-                ApiOstrov.sendArenaData(name, GameState.ФИНИШ, Main.PRFX, "", "", "", "", pls.size());
+                GM.sendArenaData(Game.GR, name, GameState.ФИНИШ, pls.size(), Main.PRFX, "", "", "");
                 for (final Rusher r : pls) {
-                    r.ifPlayer(p -> ApiOstrov.sendTitleDirect(p, TCUtils.A + "Ничья", "§cНикто не Сумел Одержать Верх!"));
+                    r.ifPlayer(p -> ScreenUtil.sendTitleDirect(p, TCUtil.A + "Ничья", "§cНикто не Сумел Одержать Верх!"));
                 }
                 task = new BukkitRunnable() {
                     @Override
@@ -450,18 +451,18 @@ public class Arena {
             rs.mklsI();
             rs.ifPlayer(p -> ApiOstrov.addStat(p, Stat.GR_pz));
         }
-        rs.taq(TCUtils.N + "[" + TCUtils.P + name + TCUtils.N + "] ", rs.team().color(),
-                TCUtils.N + " (" + TCUtils.P + rs.klls() + TCUtils.N + "-" + TCUtils.P
-                        + rs.mkls() + TCUtils.N + "-" + TCUtils.P + rs.dths() + TCUtils.N + ")");
+        rs.taq(TCUtil.N + "[" + TCUtil.P + name + TCUtil.N + "] ", rs.team().color(),
+            TCUtil.N + " (" + TCUtil.P + rs.klls() + TCUtil.N + "-" + TCUtil.P
+                + rs.mkls() + TCUtil.N + "-" + TCUtil.P + rs.dths() + TCUtil.N + ")");
     }
 
     public void killRs(final Rusher rs) {
         final LivingEntity le = rs.getEntity();
         if (gst == GameState.ИГРА) {
             rs.dthsI();
-            rs.taq(TCUtils.N + "[" + TCUtils.P + name + TCUtils.N + "] ", rs.team().color(),
-                    TCUtils.N + " (" + TCUtils.P + rs.klls() + TCUtils.N + "-" + TCUtils.P
-                            + rs.mkls() + TCUtils.N + "-" + TCUtils.P + rs.dths() + TCUtils.N + ")");
+            rs.taq(TCUtil.N + "[" + TCUtil.P + name + TCUtil.N + "] ", rs.team().color(),
+                TCUtil.N + " (" + TCUtil.P + rs.klls() + TCUtil.N + "-" + TCUtil.P
+                    + rs.mkls() + TCUtil.N + "-" + TCUtil.P + rs.dths() + TCUtil.N + ")");
 
             rs.ifPlayer(p -> {
                 p.closeInventory();
@@ -509,55 +510,55 @@ public class Arena {
         for (final Rusher rs : pls) {
             rs.ifPlayer(p -> {
                 ((Oplayer) rs).score.getSideBar()
-                        .update(AMT, TCUtils.N + "Комманды:" + getTeamLifes());
+                    .update(AMT, TCUtil.N + "Комманды:" + getTeamLifes());
             });
         }
     }
 
     //сколько игроков из скольки
     public String amtToHB() {
-        return pls.size() < min ? TCUtils.N + "На карте " + TCUtils.P + pls.size() + TCUtils.N +
-                " игроков, нужно еще " + TCUtils.A + (min - pls.size()) + TCUtils.N + " для начала"
-                : TCUtils.N + "На карте " + TCUtils.P + pls.size() + TCUtils.N + " игроков, максимум: " + TCUtils.A + max;
+        return pls.size() < min ? TCUtil.N + "На карте " + TCUtil.P + pls.size() + TCUtil.N +
+            " игроков, нужно еще " + TCUtil.A + (min - pls.size()) + TCUtil.N + " для начала"
+            : TCUtil.N + "На карте " + TCUtil.P + pls.size() + TCUtil.N + " игроков, максимум: " + TCUtil.A + max;
     }
 
     private void startScore(final PlRusher rs) {
         final SideBar sb = rs.score.getSideBar().reset().title(Main.PRFX)
-                .add(" ")
-                .add(TCUtils.N + "Карта: " + TCUtils.P + name)
-                .add(TCUtils.A + "=-=-=-=-=-=-=-")
-                .add(AMT, TCUtils.N + "Игроков: " + TCUtils.P + pls.size() + TCUtils.N + " чел.")
-                .add(" ")
-                .add(TCUtils.A + "=-=-=-=-=-=-=-");
+            .add(" ")
+            .add(TCUtil.N + "Карта: " + TCUtil.P + name)
+            .add(TCUtil.A + "=-=-=-=-=-=-=-")
+            .add(AMT, TCUtil.N + "Игроков: " + TCUtil.P + pls.size() + TCUtil.N + " чел.")
+            .add(" ")
+            .add(TCUtil.A + "=-=-=-=-=-=-=-");
         if (gst == GameState.ОЖИДАНИЕ) {
-            sb.add(LIMIT, TCUtils.N + "Ждем еще " + TCUtils.P + (min - pls.size()) + TCUtils.N + " чел.");
+            sb.add(LIMIT, TCUtil.N + "Ждем еще " + TCUtil.P + (min - pls.size()) + TCUtil.N + " чел.");
         } else {
-            sb.add(LIMIT, TCUtils.P + ApiOstrov.secondToTime(time) + TCUtils.N + "до начала!");
+            sb.add(LIMIT, TCUtil.P + TimeUtil.secondToTime(time) + TCUtil.N + "до начала!");
         }
         sb.add(" ").add("§e    ostrov77.ru").build();
     }
 
     private void gameScore(final PlRusher rs) {
         rs.score.getSideBar().reset().title(Main.PRFX)
-                .add(" ")
-                .add(TCUtils.N + "Карта: " + TCUtils.P + name)
-                .add(TCUtils.A + "=-=-=-=-=-=-=-")
-                .add(" ")
-                .add(AMT, TCUtils.N + "Комманды:" + getTeamLifes())
-                .add(TCUtils.N + "Цвет: " + TCUtils.nameOf(rs.team().cc, "ый", true))
-                .add(" ")
-                .add(GOLD, TCUtils.N + "Золото: " + TCUtils.P + rs.team().gold + " ⛃")
-                .add(DUST, TCUtils.N + "Пыль: " + TCUtils.A + rs.team().dust + " 🔥")
-                .add(" ")
-                .add(TCUtils.A + "=-=-=-=-=-=-=-")
-                .add(LIMIT, TCUtils.P + ApiOstrov.secondToTime(time))
-                .add(" ")
-                .add("§e    ostrov77.ru").build();
+            .add(" ")
+            .add(TCUtil.N + "Карта: " + TCUtil.P + name)
+            .add(TCUtil.A + "=-=-=-=-=-=-=-")
+            .add(" ")
+            .add(AMT, TCUtil.N + "Комманды:" + getTeamLifes())
+            .add(TCUtil.N + "Цвет: " + TCUtil.nameOf(rs.team().cc, "ый", true))
+            .add(" ")
+            .add(GOLD, TCUtil.N + "Золото: " + TCUtil.P + rs.team().gold + " ⛃")
+            .add(DUST, TCUtil.N + "Пыль: " + TCUtil.A + rs.team().dust + " 🔥")
+            .add(" ")
+            .add(TCUtil.A + "=-=-=-=-=-=-=-")
+            .add(LIMIT, TCUtil.P + TimeUtil.secondToTime(time))
+            .add(" ")
+            .add("§e    ostrov77.ru").build();
     }
 
     public void end() {
         if (task != null) task.cancel();
-        ApiOstrov.sendArenaData(name, GameState.ОЖИДАНИЕ, Main.PRFX, "", "", "", "", 0);
+        GM.sendArenaData(Game.GR, name, GameState.ОЖИДАНИЕ, 0, Main.PRFX, "", "", "");
         Main.active.remove(name);
         if (!pls.isEmpty()) {
             final Iterator<Rusher> it = pls.iterator();

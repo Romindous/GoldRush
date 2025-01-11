@@ -52,7 +52,7 @@ public class DirInv implements InventoryProvider {
 			if (rs.arena() != null && rs.team() != null) {
 				final WXYZ rsp = rs.team().getCloseResp(new WXYZ(pl.getLocation(), false), true);
 				if (rsp == null) {
-					ApiOstrov.sendActionBarDirect(pl, "§cПостройте первый §4Нексус §cдля телепорта!");
+					ScreenUtil.sendActionBarDirect(pl, "§cПостройте первый §4Нексус §cдля телепорта!");
 				} else {
 					pl.teleport(rsp.getCenterLoc());
 					pl.getWorld().playSound(pl, Sound.ENTITY_ENDERMAN_AMBIENT, 4f, 1.6f);

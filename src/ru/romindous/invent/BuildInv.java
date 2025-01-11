@@ -35,7 +35,7 @@ public class BuildInv implements InventoryProvider {
 		inv.setContents(emt);
 		
 		its.set(4, ClickableItem.of(new ItemBuilder(Material.TNT).name("§4Разрушить Здание!")
-			.addLore(Arrays.asList("§c§lОсторожно!", "§eПринесет §6" + bld.getGCost() + " ⛃ §eи §4" + bld.getDCost() + " 🔥")).build(), e -> {
+			.lore(Arrays.asList("§c§lОсторожно!", "§eПринесет §6" + bld.getGCost() + " ⛃ §eи §4" + bld.getDCost() + " 🔥")).build(), e -> {
 				bld.tm().blds.remove(bld);
 				bld.remove(true);
 				pl.closeInventory();
@@ -54,7 +54,7 @@ public class BuildInv implements InventoryProvider {
 			
 			its.set(32, ClickableItem.empty(upg));
 			
-			its.set(33, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(3)).addEnchant(Enchantment.MENDING)
+			its.set(33, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(3)).enchant(Enchantment.MENDING)
 				.name("§6Уровень: §43 §6(" + bld.type().getProd(bld.race()) + "§6)").build()));
 			
 			switch (bld.type()) {
@@ -86,7 +86,7 @@ public class BuildInv implements InventoryProvider {
 			
 			its.set(30, ClickableItem.empty(upg));
 			
-			its.set(31, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(2)).addEnchant(Enchantment.MENDING)
+			its.set(31, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(2)).enchant(Enchantment.MENDING)
 				.name("§6Уровень: §42 §6(" + bld.type().getProd(bld.race()) + "§6)").build()));
 			
 			its.set(32, ClickableItem.empty(upg));
@@ -117,7 +117,7 @@ public class BuildInv implements InventoryProvider {
 			}
 			break;
 		case 1:
-			its.set(29, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(1)).addEnchant(Enchantment.MENDING)
+			its.set(29, ClickableItem.empty(new ItemBuilder(bld.type().getIcon(1)).enchant(Enchantment.MENDING)
 				.name("§6Уровень: §41 §6(" + bld.type().getProd(bld.race()) + "§6)").build()));
 			
 			its.set(30, ClickableItem.empty(upg));

@@ -7,11 +7,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import ru.komiss77.ApiOstrov;
+import ru.komiss77.OConfig;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.notes.Slow;
 import ru.komiss77.utils.FastMath;
-import ru.komiss77.utils.OstrovConfig;
+import ru.komiss77.utils.StringUtil;
 import ru.romindous.Main;
 import ru.romindous.game.Arena;
 import ru.romindous.type.BuildType;
@@ -23,7 +23,7 @@ import java.util.HashSet;
 
 public interface Build {
 
-	OstrovConfig saves = new OstrovConfig(new File(Main.plug.getDataFolder() + "/builds.yml"), 0);
+	OConfig saves = new OConfig(new File(Main.plug.getDataFolder() + "/builds.yml"), 0);
 
 	int REF_DEL = 1;
 	float SPIRE_LB = 0.25f;
@@ -86,7 +86,7 @@ public interface Build {
 			@Override
 			public void run() {
 				loc.setY(loc.getY() + dY);
-				loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, pn, pn >> 5, dY, pn >> 5, 0.2d, bd, false);
+				loc.getWorld().spawnParticle(Particle.BLOCK, loc, pn, pn >> 5, dY, pn >> 5, 0.2d, bd, false);
 				loc.getWorld().playSound(loc, snd, 1f, pt);
 
 				if ((i++) == tms) cancel();
@@ -95,6 +95,6 @@ public interface Build {
 	}
 
 	static String getRelInc(final float inc) {
-		return ApiOstrov.toSigFigs((inc - 1f) * 100f, (byte) 2) + "%";
+		return StringUtil.toSigFigs((inc - 1d) * 100d, (byte) 2) + "%";
 	}
 }

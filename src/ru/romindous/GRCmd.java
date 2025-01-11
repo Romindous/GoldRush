@@ -1,11 +1,5 @@
 package ru.romindous;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import ru.romindous.game.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -14,14 +8,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-
-import ru.romindous.game.map.Setup;
-import ru.romindous.game.object.Rusher;
-import ru.romindous.invent.SetupInv;
 import ru.komiss77.ApiOstrov;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.modules.world.XYZ;
 import ru.komiss77.utils.inventory.SmartInventory;
+import ru.romindous.game.Arena;
+import ru.romindous.game.map.Setup;
+import ru.romindous.game.object.Rusher;
+import ru.romindous.invent.SetupInv;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GRCmd implements CommandExecutor, TabCompleter {
 	
@@ -83,8 +82,7 @@ public class GRCmd implements CommandExecutor, TabCompleter {
 				} else if (mm.stp.nm.equals(args[1])) {
 					SmartInventory.builder().size(3, 9)
                     .id("Map "+p.getName()).title("§6Редактор Карты §4" + args[1])
-                    .provider(mm == null ? new SetupInv(args[1]) : mm)
-                    .build().open(p);
+                    .provider(mm).build().open(p);
 				} else {
 					p.sendMessage(Main.PRFX + "§cВы уже редактируете карту §4" + mm.stp.nm);
 					return false;

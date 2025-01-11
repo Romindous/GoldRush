@@ -30,7 +30,7 @@ public class ArenaInv implements InventoryProvider {
 			final Arena ar = Main.active.get(stp.nm);
 			if (ar == null) {
 				its.set(i, ClickableItem.of(new ItemBuilder(Material.GOLD_NUGGET).name("§6" + stp.nm)
-					.addLore(Arrays.asList(" ", "§eСтадия: §4Ожидание", "§eИгроков: §40§6/§4" + stp.min)).build(), e -> {
+					.lore(Arrays.asList(" ", "§eСтадия: §4Ожидание", "§eИгроков: §40§6/§4" + stp.min)).build(), e -> {
 					pl.performCommand("gr join " + stp.nm);
 					pl.closeInventory();
 				}));
@@ -38,28 +38,28 @@ public class ArenaInv implements InventoryProvider {
 				switch (ar.gst) {
 				case ОЖИДАНИЕ:
 					its.set(i, ClickableItem.of(new ItemBuilder(Material.GOLD_NUGGET).name("§6" + ar.name)
-						.addLore(Arrays.asList(" ", "§eСтадия: §4Ожидание", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.min)).build(), e -> {
+						.lore(Arrays.asList(" ", "§eСтадия: §4Ожидание", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.min)).build(), e -> {
 						pl.performCommand("gr join " + ar.name);
 						pl.closeInventory();
 					}));
 					break;
 				case СТАРТ:
 					its.set(i, ClickableItem.of(new ItemBuilder(Material.RAW_GOLD).name("§6" + ar.name)
-						.addLore(Arrays.asList(" ", "§eСтадия: §4Старт", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max)).build(), e -> {
+						.lore(Arrays.asList(" ", "§eСтадия: §4Старт", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max)).build(), e -> {
 						pl.performCommand("gr join " + ar.name);
 						pl.closeInventory();
 					}));
 					break;
 				case ИГРА:
 					its.set(i, ClickableItem.of(new ItemBuilder(Material.RAW_GOLD_BLOCK).name("§6" + ar.name)
-						.addLore(Arrays.asList(" ", "§eСтадия: §4Игра", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max, "§cМожно зайти зрителем!")).build(), e -> {
+						.lore(Arrays.asList(" ", "§eСтадия: §4Игра", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max, "§cМожно зайти зрителем!")).build(), e -> {
 							pl.performCommand("gr join " + ar.name);
 							pl.closeInventory();
 						}));
 					break;
 				case ФИНИШ:
 					its.set(i, ClickableItem.empty(new ItemBuilder(Material.GOLD_BLOCK).name("§6" + ar.name)
-						.addLore(Arrays.asList(" ", "§eСтадия: §4Финиш", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max)).build()));
+						.lore(Arrays.asList(" ", "§eСтадия: §4Финиш", "§eИгроков: §4" + ar.pls.size() + "§6/§4" + ar.max)).build()));
 					break;
 				default:
 					break;

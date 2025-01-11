@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import ru.komiss77.utils.ItemBuilder;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.TCUtil;
 import ru.romindous.game.Arena;
 import ru.romindous.game.object.Rusher;
 
@@ -69,66 +69,66 @@ public enum Upgrade {
         final LivingEntity le;
         switch (this) {
             case ARMOR_0:
-                final Color cl = TCUtils.getBukkitColor(TCUtils.getTextColor(rs.team().cc));
-                rs.item(new ItemBuilder(Material.LEATHER_HELMET).name(TCUtils.P + "Шапка")
-                    .setUnbreakable(true).setColor(cl).build(), EquipmentSlot.HEAD);
-                rs.item(new ItemBuilder(Material.LEATHER_CHESTPLATE).name(TCUtils.P + "Куртка")
-                    .setUnbreakable(true).setColor(cl).build(), EquipmentSlot.CHEST);
-                rs.item(new ItemBuilder(Material.LEATHER_LEGGINGS).name(TCUtils.P + "Штаны")
-                    .setUnbreakable(true).setColor(cl).build(), EquipmentSlot.LEGS);
-                rs.item(new ItemBuilder(Material.LEATHER_BOOTS).name(TCUtils.P + "Сапоги")
-                    .setUnbreakable(true).setColor(cl).build(), EquipmentSlot.FEET);
+                final Color cl = TCUtil.getBukkitColor(TCUtil.getTextColor(rs.team().cc));
+                rs.item(new ItemBuilder(Material.LEATHER_HELMET).name(TCUtil.P + "Шапка")
+                    .unbreak(true).color(cl).build(), EquipmentSlot.HEAD);
+                rs.item(new ItemBuilder(Material.LEATHER_CHESTPLATE).name(TCUtil.P + "Куртка")
+                    .unbreak(true).color(cl).build(), EquipmentSlot.CHEST);
+                rs.item(new ItemBuilder(Material.LEATHER_LEGGINGS).name(TCUtil.P + "Штаны")
+                    .unbreak(true).color(cl).build(), EquipmentSlot.LEGS);
+                rs.item(new ItemBuilder(Material.LEATHER_BOOTS).name(TCUtil.P + "Сапоги")
+                    .unbreak(true).color(cl).build(), EquipmentSlot.FEET);
                 break;
             case ARMOR_1:
-                rs.item(new ItemBuilder(Material.CHAINMAIL_HELMET).name(TCUtils.P + "Шапка")
-                    .setUnbreakable(true).build(), EquipmentSlot.HEAD);
-                rs.item(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).name(TCUtils.P + "Куртка")
-                    .setUnbreakable(true).build(), EquipmentSlot.CHEST);
-                rs.item(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).name(TCUtils.P + "Джинсы")
-                    .setUnbreakable(true).build(), EquipmentSlot.LEGS);
-                rs.item(new ItemBuilder(Material.CHAINMAIL_BOOTS).name(TCUtils.P + "Сапоги")
-                    .setUnbreakable(true).build(), EquipmentSlot.FEET);
+                rs.item(new ItemBuilder(Material.CHAINMAIL_HELMET).name(TCUtil.P + "Шапка")
+                    .unbreak(true).build(), EquipmentSlot.HEAD);
+                rs.item(new ItemBuilder(Material.CHAINMAIL_CHESTPLATE).name(TCUtil.P + "Куртка")
+                    .unbreak(true).build(), EquipmentSlot.CHEST);
+                rs.item(new ItemBuilder(Material.CHAINMAIL_LEGGINGS).name(TCUtil.P + "Джинсы")
+                    .unbreak(true).build(), EquipmentSlot.LEGS);
+                rs.item(new ItemBuilder(Material.CHAINMAIL_BOOTS).name(TCUtil.P + "Сапоги")
+                    .unbreak(true).build(), EquipmentSlot.FEET);
                 break;
             case ARMOR_2:
-                rs.item(new ItemBuilder(Material.DIAMOND_HELMET).name(TCUtils.P + "Шапка")
-                    .setUnbreakable(true).build(), EquipmentSlot.HEAD);
-                rs.item(new ItemBuilder(Material.DIAMOND_CHESTPLATE).name(TCUtils.P + "Куртка")
-                    .setUnbreakable(true).build(), EquipmentSlot.CHEST);
-                rs.item(new ItemBuilder(Material.DIAMOND_LEGGINGS).name(TCUtils.P + "Штаны")
-                    .setUnbreakable(true).build(), EquipmentSlot.LEGS);
-                rs.item(new ItemBuilder(Material.DIAMOND_BOOTS).name(TCUtils.P + "Сапоги")
-                    .setUnbreakable(true).build(), EquipmentSlot.FEET);
+                rs.item(new ItemBuilder(Material.DIAMOND_HELMET).name(TCUtil.P + "Шапка")
+                    .unbreak(true).build(), EquipmentSlot.HEAD);
+                rs.item(new ItemBuilder(Material.DIAMOND_CHESTPLATE).name(TCUtil.P + "Куртка")
+                    .unbreak(true).build(), EquipmentSlot.CHEST);
+                rs.item(new ItemBuilder(Material.DIAMOND_LEGGINGS).name(TCUtil.P + "Штаны")
+                    .unbreak(true).build(), EquipmentSlot.LEGS);
+                rs.item(new ItemBuilder(Material.DIAMOND_BOOTS).name(TCUtil.P + "Сапоги")
+                    .unbreak(true).build(), EquipmentSlot.FEET);
                 break;
             case ARMOR_3:
-                rs.item(new ItemBuilder(Material.NETHERITE_HELMET).name(TCUtils.P + "Шапка")
-                    .setUnbreakable(true).build(), EquipmentSlot.HEAD);
-                rs.item(new ItemBuilder(Material.NETHERITE_CHESTPLATE).name(TCUtils.P + "Куртка")
-                    .setUnbreakable(true).build(), EquipmentSlot.CHEST);
-                rs.item(new ItemBuilder(Material.NETHERITE_LEGGINGS).name(TCUtils.P + "Штаны")
-                    .setUnbreakable(true).build(), EquipmentSlot.LEGS);
-                rs.item(new ItemBuilder(Material.NETHERITE_BOOTS).name(TCUtils.P + "Сапоги")
-                    .setUnbreakable(true).build(), EquipmentSlot.FEET);
+                rs.item(new ItemBuilder(Material.NETHERITE_HELMET).name(TCUtil.P + "Шапка")
+                    .unbreak(true).build(), EquipmentSlot.HEAD);
+                rs.item(new ItemBuilder(Material.NETHERITE_CHESTPLATE).name(TCUtil.P + "Куртка")
+                    .unbreak(true).build(), EquipmentSlot.CHEST);
+                rs.item(new ItemBuilder(Material.NETHERITE_LEGGINGS).name(TCUtil.P + "Штаны")
+                    .unbreak(true).build(), EquipmentSlot.LEGS);
+                rs.item(new ItemBuilder(Material.NETHERITE_BOOTS).name(TCUtil.P + "Сапоги")
+                    .unbreak(true).build(), EquipmentSlot.FEET);
                 break;
             case DAMAGE_0:
                 le = rs.getEntity();
-                le.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
+                le.removePotionEffect(PotionEffectType.STRENGTH);
                 break;
             case DAMAGE_1:
                 le = rs.getEntity();
-                le.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                le.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                le.removePotionEffect(PotionEffectType.STRENGTH);
+                le.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
                     9999999, 0, true, false , false));
                 break;
             case DAMAGE_2:
                 le = rs.getEntity();
-                le.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                le.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                le.removePotionEffect(PotionEffectType.STRENGTH);
+                le.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
                     9999999, 1, true, false , false));
                 break;
             case DAMAGE_3:
                 le = rs.getEntity();
-                le.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-                le.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,
+                le.removePotionEffect(PotionEffectType.STRENGTH);
+                le.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,
                     9999999, 2, true, false , false));
                 break;
             case MAP:
@@ -154,7 +154,7 @@ public enum Upgrade {
                     if (it.getType() == Arena.sword.getType()) {
                         it.removeEnchantment(Enchantment.SWEEPING_EDGE);
                     } else if (it.getType() == Arena.bow.getType()) {
-                        it.removeEnchantment(Enchantment.ARROW_FIRE);
+                        it.removeEnchantment(Enchantment.FLAME);
                     }
                 }
                 break;
@@ -164,7 +164,7 @@ public enum Upgrade {
                     if (it.getType() == Arena.sword.getType()) {
                         it.addEnchantment(Enchantment.SWEEPING_EDGE, Enchantment.SWEEPING_EDGE.getMaxLevel());
                     } else if (it.getType() == Arena.bow.getType()) {
-                        it.addEnchantment(Enchantment.ARROW_FIRE, Enchantment.ARROW_FIRE.getMaxLevel());
+                        it.addEnchantment(Enchantment.FLAME, Enchantment.FLAME.getMaxLevel());
                     }
                 }
                 break;

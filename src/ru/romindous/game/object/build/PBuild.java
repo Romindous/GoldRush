@@ -12,9 +12,7 @@ import ru.komiss77.ApiOstrov;
 import ru.komiss77.modules.world.Schematic;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.modules.world.XYZ;
-import ru.komiss77.utils.ItemBuilder;
-import ru.komiss77.utils.LocationUtil;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.*;
 import ru.romindous.Main;
 import ru.romindous.game.Arena;
 import ru.romindous.game.goal.MobGoal;
@@ -68,7 +66,7 @@ public class PBuild implements Build {
 		final LinkedList<LocData> lds = new LinkedList<>();
 		final World w = pos.w;
 		final String wnm = w.getName();
-		final String bclr = TCUtils.getDyeColor(tm.txc).name();
+		final String bclr = TCUtil.getDyeColor(tm.txc).name();
 		for (int x = 0; x != dX; x++) {
 			for (int z = 0; z != dZ; z++) {
 				for (int y = 0; y != dY; y++) {
@@ -175,14 +173,14 @@ public class PBuild implements Build {
 				final Location loc = p.getCenterLoc();
 				final Block b = loc.getBlock();
 				final BlockData bd = b.getBlockData();
-				cLoc.w.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
+				cLoc.w.spawnParticle(Particle.BLOCK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
 				cLoc.w.playSound(loc, bd.getSoundGroup().getBreakSound(), 1f, 0.8f);
 				b.setType(Material.AIR, false);
 				it.remove();
 			}
 			tm.rs.ifPlayer(p -> {
-				ApiOstrov.sendTitleDirect(p, "", TCUtils.N + "Постройка " +
-					TCUtils.P + type.nm + TCUtils.N + " Под Осадой!", 12, 40, 12);
+				ScreenUtil.sendTitleDirect(p, "", TCUtil.N + "Постройка " +
+					TCUtil.P + type.nm + TCUtil.N + " Под Осадой!", 12, 40, 12);
 			});
 			return false;
 		} else {
@@ -201,7 +199,7 @@ public class PBuild implements Build {
 			final Location loc = p.getCenterLoc();
 			final Block b = loc.getBlock();
 			final BlockData bd = b.getBlockData();
-			cLoc.w.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
+			cLoc.w.spawnParticle(Particle.BLOCK, loc, 20, 0.4d, 0.4d, 0.4d, 0.2d, bd, false);
 			cLoc.w.playSound(loc, bd.getSoundGroup().getBreakSound(), 1f, 0.8f);
 			b.setType(Material.AIR, false);
 		}
@@ -228,14 +226,14 @@ public class PBuild implements Build {
 		final StringBuilder sb = new StringBuilder();
 		for (final Upgrade up : Upgrade.values()) {
 			if (!tm.hasBuild(up.bt, up.lvl, null) && up.remFor(tm.rs)) {
-				sb.append(TCUtils.N).append("\n - ").append(Upgrade.CLR).append(up.name);
+				sb.append(TCUtil.N).append("\n - ").append(Upgrade.CLR).append(up.name);
 			}
 		}
 
 		tm.rs.ifPlayer(p -> {
 			if (!sb.isEmpty()) p.sendMessage(Main.PRFX + "Потеряны улучшения:" + sb.toString());
-			ApiOstrov.sendTitleDirect(p, "", TCUtils.N + "Постройка " +
-				TCUtils.A + type.nm + TCUtils.N + " Разрушена!", 12, 40, 12);
+			ScreenUtil.sendTitleDirect(p, "", TCUtil.N + "Постройка " +
+				TCUtil.A + type.nm + TCUtil.N + " Разрушена!", 12, 40, 12);
 		});
 
 		if (pay) tm.chgRecs(getGCost(), getDCost());
@@ -341,7 +339,7 @@ public class PBuild implements Build {
 			break;
 		case SPIRE:
 			loc.add(0d, BuildType.maxY >> 1, 0d);
-			final LivingEntity le = LocationUtil.getClsChEnt(new WXYZ(loc), MobGoal.FAR_RANGE, Mob.class, e -> tm.isEnemy(e));
+			final LivingEntity le = LocUtil.getClsChEnt(new WXYZ(loc), MobGoal.FAR_RANGE, Mob.class, e -> tm.isEnemy(e));
 
 			if (le != null) {
 				loc.getWorld().spawnParticle(Particle.LAVA, loc, 40, 0.4d, 0.4d, 0.4d, 0.2d);
@@ -436,14 +434,14 @@ public class PBuild implements Build {
 			final Material ofhd, final Material helm, final Material chest, final Material legs, final Material boots) {
 		final Mob mb = (Mob) loc.getWorld().spawnEntity(loc.add(ApiOstrov.rndSignNum(BuildType.maxXZ, 2),
 				1, ApiOstrov.rndSignNum(BuildType.maxXZ, 2)), etp, false);
-		mb.customName(TCUtils.format(tm.color() + name)); mb.setCustomNameVisible(false);
+		mb.customName(TCUtil.form(tm.color() + name)); mb.setCustomNameVisible(false);
 		mb.setRemoveWhenFarAway(false); mb.setPersistent(true); final EntityEquipment eq = mb.getEquipment();
-		if (hand != null) eq.setItemInMainHand(new ItemBuilder(hand).setUnbreakable(true).build(), false);
-		if (ofhd != null) eq.setItemInOffHand(new ItemBuilder(ofhd).setUnbreakable(true).build(), false);
-		if (helm != null) eq.setHelmet(new ItemBuilder(helm).setUnbreakable(true).build(), false);
-		if (chest != null) eq.setChestplate(new ItemBuilder(chest).setUnbreakable(true).build(), false);
-		if (legs != null) eq.setLeggings(new ItemBuilder(legs).setUnbreakable(true).build(), false);
-		if (boots != null) eq.setBoots(new ItemBuilder(boots).setUnbreakable(true).build(), false);
+		if (hand != null) eq.setItemInMainHand(new ItemBuilder(hand).unbreak(true).build(), false);
+		if (ofhd != null) eq.setItemInOffHand(new ItemBuilder(ofhd).unbreak(true).build(), false);
+		if (helm != null) eq.setHelmet(new ItemBuilder(helm).unbreak(true).build(), false);
+		if (chest != null) eq.setChestplate(new ItemBuilder(chest).unbreak(true).build(), false);
+		if (legs != null) eq.setLeggings(new ItemBuilder(legs).unbreak(true).build(), false);
+		if (boots != null) eq.setBoots(new ItemBuilder(boots).unbreak(true).build(), false);
 
 		if (mb instanceof final PiglinAbstract pa) pa.setImmuneToZombification(true);
 		if (mb instanceof final Hoglin hg) hg.setImmuneToZombification(true);
@@ -456,27 +454,27 @@ public class PBuild implements Build {
 
 	public ItemStack getInfoItem() {
 		final ItemBuilder ib = new ItemBuilder(Material.CAMPFIRE)
-				.name(TCUtils.N + "[" + TCUtils.P + type.nm + TCUtils.N + "] Уровня: " + TCUtils.A + lvl).setAmount(lvl);
+				.name(TCUtil.N + "[" + TCUtil.P + type.nm + TCUtil.N + "] Уровня: " + TCUtil.A + lvl).amount(lvl);
 		final LinkedList<String> lr = new LinkedList<>();
-		lr.add(TCUtils.N + "Здоровье: §c" + health + TCUtils.N + "/§c" + (int) (type.hp * lvl * race.mbhp));
+		lr.add(TCUtil.N + "Здоровье: §c" + health + TCUtil.N + "/§c" + (int) (type.hp * lvl * race.mbhp));
 		lr.add(" ");
 		switch (type) {
 			case NEXUS:
-				lr.add(TCUtils.N + "Точка " + TCUtils.P + "спавна " + TCUtils.N + "комманды!");
-				lr.add("§eДобывает: " + TCUtils.P + (GOLDi * (lvl + 1)) + " ⛃ §eза §c" + cld + " сек");
+				lr.add(TCUtil.N + "Точка " + TCUtil.P + "спавна " + TCUtil.N + "комманды!");
+				lr.add("§eДобывает: " + TCUtil.P + (GOLDi * (lvl + 1)) + " ⛃ §eза §c" + cld + " сек");
 				break;
 			case GOLD:
-				lr.add("§eДобывает: " + TCUtils.P + (GOLDi * lvl) + " ⛃ §eза §c" + cld + " сек");
+				lr.add("§eДобывает: " + TCUtil.P + (GOLDi * lvl) + " ⛃ §eза §c" + cld + " сек");
 				break;
 			case DUST:
-				lr.add("§eДобывает: " + TCUtils.A + (DUSTi * lvl) + " 🔥 §eза §c" + cld + " сек");
+				lr.add("§eДобывает: " + TCUtil.A + (DUSTi * lvl) + " 🔥 §eза §c" + cld + " сек");
 				break;
 			case SPIRE:
-				lr.add("§eНаносит " + ApiOstrov.toSigFigs((float) tm.rs.mdDmg(SPIRE_DMG), (byte) 1) + " 💢 §eвраждебным существам");
+				lr.add("§eНаносит " + StringUtil.toSigFigs((float) tm.rs.mdDmg(SPIRE_DMG), (byte) 1) + " 💢 §eвраждебным существам");
 				lr.add("§eпри взрыве снаряда, каждые §c" + cld + " сек");
 				break;
 			case UPGRADE:
-				lr.add("§eЭффективность - " + TCUtils.P + ApiOstrov.toSigFigs(100f / tm.uptm, (byte) 2) + "%");
+				lr.add("§eЭффективность - " + TCUtil.P + StringUtil.toSigFigs(100f / tm.uptm, (byte) 2) + "%");
 				lr.add("§eКаждые §с" + cld + " сек§e, повышает:");
 				switch (lvl) {
 					case 3:
@@ -495,15 +493,15 @@ public class PBuild implements Build {
 			default:
 				lr.add("§eПризывает: " + tm.color() + type.getProd(race) + " §eкаждые §c" + type.cld + " сек");
 				lr.add("§eХарактеристики:");
-				lr.add(TCUtils.N + "- Здоровье: §к" + (int) (hp() * tm.mobHp) + " ❤");
-				lr.add(TCUtils.N + "- Защита: §b" + (int) (ar() * tm.mobAr * 100f) + "% 🛡");
-				lr.add(TCUtils.N + "- Скорость: §м" + ApiOstrov.toSigFigs(spd() * tm.mobSpd, (byte) 2) + " ⯮");
-				lr.add(TCUtils.N + "- Урон: §c" + ApiOstrov.toSigFigs(dmg() * tm.mobDmg, (byte) 1) + " 💢");
-				lr.add(TCUtils.N + "- Атакует раз в §6" + ApiOstrov.toSigFigs(0.2f / (cd() * tm.mobCd), (byte) 1) + " сек");
-				lr.add(TCUtils.N + "- Сила отброса: §с" + (int) (kb() * tm.mobKb * 10f) + " ◎");
+				lr.add(TCUtil.N + "- Здоровье: §к" + (int) (hp() * tm.mobHp) + " ❤");
+				lr.add(TCUtil.N + "- Защита: §b" + (int) (ar() * tm.mobAr * 100f) + "% 🛡");
+				lr.add(TCUtil.N + "- Скорость: §м" + StringUtil.toSigFigs(spd() * tm.mobSpd, (byte) 2) + " ⯮");
+				lr.add(TCUtil.N + "- Урон: §c" + StringUtil.toSigFigs(dmg() * tm.mobDmg, (byte) 1) + " 💢");
+				lr.add(TCUtil.N + "- Атакует раз в §6" + StringUtil.toSigFigs(0.2f / (cd() * tm.mobCd), (byte) 1) + " сек");
+				lr.add(TCUtil.N + "- Сила отброса: §с" + (int) (kb() * tm.mobKb * 10f) + " ◎");
 				break;
 		}
-		return ib.addLore(lr).build();
+		return ib.lore(lr).build();
 	}
 
 	public boolean has(final WXYZ loc) {

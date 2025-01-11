@@ -13,7 +13,7 @@ import org.bukkit.util.Vector;
 import ru.komiss77.enums.GameState;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.utils.FastMath;
-import ru.komiss77.utils.LocationUtil;
+import ru.komiss77.utils.LocUtil;
 import ru.komiss77.version.Nms;
 import ru.romindous.game.Arena;
 import ru.romindous.game.object.Nexus;
@@ -173,7 +173,7 @@ public class SiegerGoal implements MobGoal {
 					case RAVAGER:
 						mob.swingMainHand();
 						final Vector dir = eyel.getDirection().setY(0.1d).multiply(atkKb);
-						for (final LivingEntity le : LocationUtil.getChEnts(tlc, MELEE_DST, LivingEntity.class, le -> true)) {
+						for (final LivingEntity le : LocUtil.getChEnts(tlc, MELEE_DST, LivingEntity.class, le -> true)) {
 							mob.attack(le);
 							le.setVelocity(dir);
 						}
@@ -214,7 +214,7 @@ public class SiegerGoal implements MobGoal {
 	}
 
 	private LivingEntity findFreeTgt(final WXYZ mbl) {
-		return LocationUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
+		return LocUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
 			return le.getPortalCooldown() == 0 && mob.getEntityId() != le.getEntityId() && nx.isEnemy(le);
 		});
 	}

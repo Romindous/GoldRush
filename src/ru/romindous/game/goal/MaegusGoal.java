@@ -17,7 +17,7 @@ import ru.komiss77.Ostrov;
 import ru.komiss77.enums.GameState;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.utils.FastMath;
-import ru.komiss77.utils.LocationUtil;
+import ru.komiss77.utils.LocUtil;
 import ru.komiss77.version.Nms;
 import ru.romindous.game.Arena;
 import ru.romindous.game.object.Nexus;
@@ -190,7 +190,7 @@ public class MaegusGoal implements MobGoal {
 					case BLAZE:
 						eyel.getWorld().spawnParticle(Particle.FALLING_LAVA, eyel, 20, 0.2d, 0.4d, 0.2d, 0.2d);
 						eyel.getWorld().spawnParticle(Particle.LAVA, tlc, 80, 2.4d, 1.4d, 2.4d, 0.4d);
-						for (final LivingEntity le : LocationUtil.getChEnts(tlc, MELEE_DST, LivingEntity.class, le -> nx.isEnemy(le))) {
+						for (final LivingEntity le : LocUtil.getChEnts(tlc, MELEE_DST, LivingEntity.class, le -> nx.isEnemy(le))) {
 							mob.attack(le);
 							mob.swingMainHand();
 							final Location lel = le.getLocation();
@@ -203,7 +203,7 @@ public class MaegusGoal implements MobGoal {
 						final World w = eyel.getWorld();
 						Ostrov.sync(() -> {
 							((Evoker) mob).setSpell(Spell.NONE);
-							final ArrayList<LivingEntity> ts = new ArrayList<>(LocationUtil
+							final ArrayList<LivingEntity> ts = new ArrayList<>(LocUtil
 								.getChEnts(new WXYZ(eyel, false), AGRO_RANGE, LivingEntity.class, le -> true));
 							for (final LivingEntity le : ts) w.spawn(le.getLocation(), EvokerFangs.class).setOwner(mob);
 
@@ -274,7 +274,7 @@ public class MaegusGoal implements MobGoal {
 	}
 
 	private LivingEntity findFreeTgt(final WXYZ mbl) {
-		return LocationUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
+		return LocUtil.getClsChEnt(mbl, AGRO_RANGE, LivingEntity.class, le -> {
 			return le.getPortalCooldown() == 0 && mob.getEntityId() != le.getEntityId() && nx.isEnemy(le);
 		});
 	}

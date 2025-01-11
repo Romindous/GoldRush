@@ -18,11 +18,11 @@ import org.bukkit.event.world.EntitiesLoadEvent;
 import ru.komiss77.ApiOstrov;
 import ru.komiss77.enums.Data;
 import ru.komiss77.enums.Stat;
-import ru.komiss77.events.BungeeDataRecieved;
 import ru.komiss77.events.ChatPrepareEvent;
 import ru.komiss77.events.LocalDataLoadEvent;
 import ru.komiss77.modules.player.PM;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.StringUtil;
+import ru.komiss77.utils.TCUtil;
 import ru.romindous.Main;
 import ru.romindous.game.Arena;
 import ru.romindous.game.goal.MobGoal;
@@ -35,8 +35,8 @@ public class MainLst implements Listener {
 	
 	@EventHandler
 	public void onLoad(final LocalDataLoadEvent e) {
-		e.getPlayer().sendPlayerListHeader(TCUtils.format(TCUtils.N + "["
-			+ TCUtils.P + "Золотая " + TCUtils.A + "Лихорадка" + TCUtils.N + "]"));
+		e.getPlayer().sendPlayerListHeader(TCUtil.form(TCUtil.N + "["
+			+ TCUtil.P + "Золотая " + TCUtil.A + "Лихорадка" + TCUtil.N + "]"));
 		Main.lobbyPl(e.getPlayer(), Rusher.getPlRusher(e.getPlayer()));
 
 		final String wantArena = e.getOplayer().getDataString(Data.WANT_ARENA_JOIN);
@@ -83,14 +83,14 @@ public class MainLst implements Listener {
         final PlRusher rs = Rusher.getPlRusher(p);
 		e.showLocal(false);
     	if (rs.arena() == null) {
-            final Component c = TCUtils.format(TCUtils.N + "(" + TCUtils.P + ApiOstrov.toSigFigs(
-        		(float) ApiOstrov.getStat(p, Stat.GR_kill) / (float) ApiOstrov.getStat(p, Stat.GR_death), (byte) 2) + TCUtils.N + ") ");
+            final Component c = TCUtil.form(TCUtil.N + "(" + TCUtil.P + StringUtil.toSigFigs(
+        		(double) ApiOstrov.getStat(p, Stat.GR_kill) / (double) ApiOstrov.getStat(p, Stat.GR_death), (byte) 2) + TCUtil.N + ") ");
             e.setSenderGameInfo(c);
             e.setViewerGameInfo(c);
     	} else {
 			switch (rs.arena().gst) {
 			case ОЖИДАНИЕ, ФИНИШ:
-	            final Component c = TCUtils.format(TCUtils.N + "[" + TCUtils.P + rs.arena().name + TCUtils.N + "] ");
+	            final Component c = TCUtil.form(TCUtil.N + "[" + TCUtil.P + rs.arena().name + TCUtil.N + "] ");
                 e.setSenderGameInfo(c);
                 e.setViewerGameInfo(c);
 				break;
@@ -105,29 +105,29 @@ public class MainLst implements Listener {
 	public void onAChat(final AsyncChatEvent e) {
 		final Player snd = e.getPlayer();
         final PlRusher rs = Rusher.getPlRusher(snd);
-		final String msg = TCUtils.toString(e.message());
+		final String msg = TCUtil.deform(e.message());
 		final Arena ar = rs.arena();
 		//если на арене
 		if (ar == null) {
 			for (final Audience au : e.viewers()) {
-				au.sendMessage(TCUtils.format(Main.PRFX.replace('[', '<').replace(']', '>') + snd.getName() + 
-					TCUtils.N + " [" + TCUtils.A + "ЛОББИ" + TCUtils.N + "] §7§o≫ " + TCUtils.N + msg));
+				au.sendMessage(TCUtil.form(Main.PRFX.replace('[', '<').replace(']', '>') + snd.getName() + 
+					TCUtil.N + " [" + TCUtil.A + "ЛОББИ" + TCUtil.N + "] §7§o≫ " + TCUtil.N + msg));
 			}
 		} else {
 			switch (ar.gst) {
 			case ОЖИДАНИЕ:
 			case ФИНИШ:
 				for (final Audience au : e.viewers()) {
-					au.sendMessage(TCUtils.format(Main.PRFX.replace('[', '<').replace(']', '>') + snd.getName() + 
-						TCUtils.N + " [" + TCUtils.P + ar.name + TCUtils.N + "] §7§o≫ " + TCUtils.N + msg));
+					au.sendMessage(TCUtil.form(Main.PRFX.replace('[', '<').replace(']', '>') + snd.getName() + 
+						TCUtil.N + " [" + TCUtil.P + ar.name + TCUtil.N + "] §7§o≫ " + TCUtil.N + msg));
 				}
 				break;
 			case СТАРТ:
 			case ИГРА:
 				for (final Rusher ors : ar.pls) {
 					ors.ifPlayer(p -> {
-						p.sendMessage(TCUtils.format(TCUtils.N + "[Всем] " + (ors.team() == null ? TCUtils.P : ors.team().color()) +
-								snd.getName() + " §7§o≫ " + TCUtils.N + msg.replaceFirst("!", "")));
+						p.sendMessage(TCUtil.form(TCUtil.N + "[Всем] " + (ors.team() == null ? TCUtil.P : ors.team().color()) +
+								snd.getName() + " §7§o≫ " + TCUtil.N + msg.replaceFirst("!", "")));
 						p.playSound(p.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1f, 1.4f);
 					});
 				}

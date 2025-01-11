@@ -14,17 +14,19 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scoreboard.ScoreboardManager;
-import ru.komiss77.ApiOstrov;
 import ru.komiss77.Ostrov;
+import ru.komiss77.enums.Game;
 import ru.komiss77.enums.GameState;
 import ru.komiss77.enums.Stat;
+import ru.komiss77.modules.games.GM;
 import ru.komiss77.modules.player.PM;
 import ru.komiss77.modules.world.WXYZ;
 import ru.komiss77.modules.world.WorldManager;
 import ru.komiss77.modules.world.WorldManager.Generator;
 import ru.komiss77.modules.world.XYZ;
 import ru.komiss77.utils.ItemBuilder;
-import ru.komiss77.utils.TCUtils;
+import ru.komiss77.utils.StringUtil;
+import ru.komiss77.utils.TCUtil;
 import ru.komiss77.version.Nms;
 import ru.romindous.game.Arena;
 import ru.romindous.game.map.Setup;
@@ -68,11 +70,11 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		//Ostrov things
 		PM.setOplayerFun(p -> new PlRusher(p), true);
-		TCUtils.N = "§7";
-		TCUtils.P = "§6";
-		TCUtils.A = "§4";
+		TCUtil.N = "§7";
+		TCUtil.P = "§6";
+		TCUtil.A = "§4";
 
-		PRFX = TCUtils.N + "[" + TCUtils.P + "Зо" + TCUtils.A + "Ла" + TCUtils.N + "] ";
+		PRFX = TCUtil.N + "[" + TCUtil.P + "Зо" + TCUtil.A + "Ла" + TCUtil.N + "] ";
 		
 		getServer().getConsoleSender().sendMessage("§aEnabling GoldRush!");
 		
@@ -130,7 +132,7 @@ public class Main extends JavaPlugin {
 					if (stp.fin) {
 						if (stp.lobby != null) {
 							WorldManager.load(getServer().getConsoleSender(), stp.lobby.worldName, Environment.NORMAL, Generator.Empty);
-							ApiOstrov.sendArenaData(stp.nm, GameState.ОЖИДАНИЕ, "§4[§6ЗоЛа§4]", "", "", "", "", 0);
+							GM.sendArenaData(Game.GR, stp.nm, GameState.ОЖИДАНИЕ, 0, "§4[§6ЗоЛа§4]", "", "", "");
 							nonactive.put(stp.nm, stp);
 						}
 					}
@@ -179,8 +181,8 @@ public class Main extends JavaPlugin {
 		p.setGlowing(false);
 		p.teleport(lobby.getCenterLoc());
 		final String rpm = rs.getTopPerm();
-		rs.taq(TCUtils.N + "<" + TCUtils.A + "ЛОББИ" + TCUtils.N + "> ", TCUtils.N,
-			(rpm.isEmpty() ? "" : TCUtils.N + " (§e" + rpm + TCUtils.N + ")"));
+		rs.taq(TCUtil.N + "<" + TCUtil.A + "ЛОББИ" + TCUtil.N + "> ", TCUtil.N,
+			(rpm.isEmpty() ? "" : TCUtil.N + " (§e" + rpm + TCUtil.N + ")"));
 		for (final Player pl : Bukkit.getOnlinePlayers()) {
 			if (p.getWorld().getUID().equals(pl.getWorld().getUID())) {
 				pl.showPlayer(Main.plug, p);
@@ -209,15 +211,15 @@ public class Main extends JavaPlugin {
 	public static void lobbyScore(final PlRusher rs) {
 		rs.score.getSideBar().reset().title(Main.PRFX)
 			.add(" ")
-			.add(TCUtils.N + "Карта: §4ЛОББИ")
-			.add(TCUtils.A + "=-=-=-=-=-=-=-")
-			.add(TCUtils.P + "Игр " + TCUtils.N + "всего: " + TCUtils.P + rs.getStat(Stat.GR_game))
+			.add(TCUtil.N + "Карта: §4ЛОББИ")
+			.add(TCUtil.A + "=-=-=-=-=-=-=-")
+			.add(TCUtil.P + "Игр " + TCUtil.N + "всего: " + TCUtil.P + rs.getStat(Stat.GR_game))
 			.add(" ")
-			.add(TCUtils.N + "Выйграно: " + TCUtils.P + rs.getStat(Stat.GR_win))
-			.add(TCUtils.N + "Проиграно: " + TCUtils.P + rs.getStat(Stat.GR_loose))
-			.add(TCUtils.A + "=-=-=-=-=-=-=-")
-			.add(TCUtils.N + "(" + TCUtils.P + "К" + TCUtils.N + "/" + TCUtils.A + "Д" + TCUtils.N + "): " + TCUtils.P +
-				ApiOstrov.toSigFigs((float) rs.getStat(Stat.GR_kill) / (float) rs.getStat(Stat.GR_death), (byte) 2))
+			.add(TCUtil.N + "Выйграно: " + TCUtil.P + rs.getStat(Stat.GR_win))
+			.add(TCUtil.N + "Проиграно: " + TCUtil.P + rs.getStat(Stat.GR_loose))
+			.add(TCUtil.A + "=-=-=-=-=-=-=-")
+			.add(TCUtil.N + "(" + TCUtil.P + "К" + TCUtil.N + "/" + TCUtil.A + "Д" + TCUtil.N + "): " + TCUtil.P +
+				StringUtil.toSigFigs((double) rs.getStat(Stat.GR_kill) / (double) rs.getStat(Stat.GR_death), (byte) 2))
 			.add(" ")
 			.add("§e    ostrov77.ru").build();
 	}
@@ -231,7 +233,7 @@ public class Main extends JavaPlugin {
 		for (final Rusher rs : PM.getOplayers(PlRusher.class)) {
 			if (rs.arena() != null) i++;
 		}
-		final Component c = TCUtils.format(TCUtils.N + "Сейчас в игре: " + TCUtils.P + i + TCUtils.N + " человек!");
+		final Component c = TCUtil.form(TCUtil.N + "Сейчас в игре: " + TCUtil.P + i + TCUtil.N + " человек!");
 		for (final Player pl : Bukkit.getOnlinePlayers()) pl.sendPlayerListFooter(c);
 	}
 
